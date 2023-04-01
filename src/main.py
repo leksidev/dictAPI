@@ -18,7 +18,8 @@ app = FastAPI()
 def get_definition_word(word):
     response = requests.get(url=f"https://owlbot.info/api/v4/dictionary/{word}",
                             headers={'Authorization': TOKEN})
-    return response.json()
+    definitions = [x['definition'] for x in response.json()['definitions']]
+    return json.dumps({'definitions': definitions})
 
 
 @app.get("/translate/{word}")
@@ -29,5 +30,3 @@ def get_translation_word(word):
                                      'text': word})
     translate = response.json()['def'][0]['tr'][0]['text']
     return json.dumps({'translate': translate}, ensure_ascii=False)
-
-print(get_definition_word('yes'))
