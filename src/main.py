@@ -15,7 +15,7 @@ TRANSLATOR_TOKEN = os.getenv('TRANSLATOR_TOKEN')
 app = FastAPI()
 
 
-@app.get("/definition/{word}", response_class=JSONResponse)
+@app.get("/definition/{word}", response_class=JSONResponse, description='get definition word in english')
 def get_definition_word(word: str):
     response = requests.get(url=f"https://owlbot.info/api/v4/dictionary/{word}",
                             headers={'Authorization': TOKEN})
@@ -23,13 +23,11 @@ def get_definition_word(word: str):
     return json.dumps({'definitions': definitions, })
 
 
-@app.get("/translate/{word}", response_class=JSONResponse)
-def get_translation_word(word: str):
+@app.get("/translate/{word}", response_class=JSONResponse, description='get translate word from english to russian')
+def get_translation_word(word: str = 'deer'):
     response = requests.post(url="https://dictionary.yandex.net/api/v1/dicservice.json/lookup",
                              params={'key': TRANSLATOR_TOKEN,
                                      'lang': 'en-ru',
                                      'text': word})
     translate = response.json()['def'][0]['tr'][0]['text']
     return json.dumps({'translate': translate, }, ensure_ascii=False)
-
-print(get_translation_word('deer'))
