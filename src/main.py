@@ -15,7 +15,7 @@ app = FastAPI()
 
 
 @app.get("/definition/{word}")
-def get_definition_word(word):
+def get_definition_word(word: str):
     response = requests.get(url=f"https://owlbot.info/api/v4/dictionary/{word}",
                             headers={'Authorization': TOKEN})
     definitions = [x['definition'] for x in response.json()['definitions']]
@@ -23,7 +23,7 @@ def get_definition_word(word):
 
 
 @app.get("/translate/{word}")
-def get_translation_word(word):
+def get_translation_word(word: str):
     response = requests.post(url="https://dictionary.yandex.net/api/v1/dicservice.json/lookup",
                              params={'key': TRANSLATOR_TOKEN,
                                      'lang': 'en-ru',
